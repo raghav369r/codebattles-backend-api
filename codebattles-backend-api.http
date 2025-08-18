@@ -1,0 +1,6 @@
+@codebattles_backend_api_HostAddress = http://localhost:5066
+
+GET {{codebattles_backend_api_HostAddress}}/
+Accept: application/json
+
+###
