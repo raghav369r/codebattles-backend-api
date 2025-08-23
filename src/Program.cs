@@ -1,6 +1,7 @@
 using System.Text;
 using CodeBattles_Backend.Domain;
 using CodeBattles_Backend.Domain.DTOs;
+using CodeBattles_Backend.Middlewares;
 using CodeBattles_Backend.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
@@ -55,12 +56,15 @@ public class Program
         builder.Services.AddScoped<JWTService>();
         builder.Services.AddScoped<PasswordService>();
         builder.Services.AddScoped<AuthService>();
+        builder.Services.AddTransient<GlobalExceptionHandler>();
 
         builder.Services.AddDbContext<AppDBContext>(options =>
             options.UseSqlServer(builder.Configuration.GetConnectionString("MSSQLConnection"))
         );
 
         var app = builder.Build();
+
+        app.UseMiddleware<GlobalExceptionHandler>();
 
         if (app.Environment.IsDevelopment())
         {
