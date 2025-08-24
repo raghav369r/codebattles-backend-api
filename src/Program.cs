@@ -48,6 +48,7 @@ public class Program
                 };
             });
 
+        builder.Services.AddHttpClient();
         builder.Services.AddAuthorization();
         builder.Services.AddHttpContextAccessor();
         builder.Services.AddControllers();
@@ -56,6 +57,7 @@ public class Program
         builder.Services.AddScoped<JWTService>();
         builder.Services.AddScoped<PasswordService>();
         builder.Services.AddScoped<AuthService>();
+        builder.Services.AddScoped<GlotAPIService>();
         builder.Services.AddTransient<GlobalExceptionHandler>();
 
         builder.Services.AddDbContext<AppDBContext>(options =>
