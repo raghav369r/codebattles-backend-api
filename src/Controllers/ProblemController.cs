@@ -23,7 +23,12 @@ public class ProblemController : ControllerBase
   {
     bool isAvailable = await _problemService.IsTitleAvailable(addProblemDTO.Title);
     if (!isAvailable) return BadRequest(new { message = "A problem already exist with provided title!!" });
+
+    bool areTopicIdsValid = await _problemService.AreTopicIdValid(addProblemDTO.Topics);
+    if (!areTopicIdsValid) return BadRequest(new { message = "One or more TopicIds are invalid!!" });
+
     await _problemService.AddProblemAndTCS(addProblemDTO);
+
     return Ok("Problem Added successfully");
   }
 

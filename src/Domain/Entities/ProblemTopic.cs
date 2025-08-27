@@ -7,4 +7,4 @@ public class ProblemTopic
 {
   public int ProblemId { get; set; }
   public int TopicId { get; set; }
-}
+} 

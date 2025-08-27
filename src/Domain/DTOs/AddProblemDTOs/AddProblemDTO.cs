@@ -20,7 +20,10 @@ public class AddProblemDTO
   [Required]
   [MinLength(1)]
   public List<ExampleTestCaseDTO> ExampletestCases { get; set; } = null!;
-
+  [Required]
+  [MinLength(1)]
+  [MaxLength(10)]
+  public List<int> Topics { get; set; } = null!;
   public Problem ToProblemEntity()
   {
     if (Difficulty == null)
@@ -32,12 +35,16 @@ public class AddProblemDTO
       Difficulty = this.Difficulty ?? 0
     };
   }
-  public IEnumerable<TestCase> GetTestCases(int problemId)
+  public List<TestCase> GetTestCases(int problemId)
   {
-    return TestCases.Select(tc => tc.ToTestCaseEntity(problemId));
+    return TestCases.Select(tc => tc.ToTestCaseEntity(problemId)).ToList();
   }
-  public IEnumerable<ExmapleTestCase> GetExmapleTestCases(int problemId)
+  public List<ExmapleTestCase> GetExmapleTestCases(int problemId)
   {
-    return ExampletestCases.Select(etc => etc.ToExampleTestCaseEntity(problemId));
+    return ExampletestCases.Select(etc => etc.ToExampleTestCaseEntity(problemId)).ToList();
+  }
+  public List<int> GetTopicIds()
+  {
+    return [.. Topics];
   }
 }

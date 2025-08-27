@@ -2,6 +2,7 @@ using CodeBattles_Backend.Domain;
 using CodeBattles_Backend.Domain.Entities;
 using CodeBattles_Backend.DTOs.AddProblemDTOs;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Storage;
 
 namespace CodeBattles_Backend.Services;
 
@@ -18,13 +19,31 @@ public class ProblemService
     return !await _appDBContext.Problems.AnyAsync(p => p.Title == title);
   }
 
-  public async Task AddProblemAndTCS(AddProblemDTO addProblemDTO)
+  public async Task<bool> AddProblemAndTCS(AddProblemDTO addProblemDTO)
   {
-    var problem = addProblemDTO.ToProblemEntity();
-    problem.TestCases = addProblemDTO.TestCases.Select(tc => new TestCase { Input = tc.Input, Output = tc.Output }).ToList();
-    problem.ExamapleTestCases = addProblemDTO.ExampletestCases.Select(tc => new ExmapleTestCase { Input = tc.Input, Output = tc.Output, Explanation = tc.Explanation }).ToList(); ;
-    var addedProblem = await _appDBContext.Problems.AddAsync(problem);
-    await _appDBContext.SaveChangesAsync();
+    IDbContextTransaction transaction = await _appDBContext.Database.BeginTransactionAsync();
+    try
+    {
+      var problem = addProblemDTO.ToProblemEntity();
+      problem.TestCases = addProblemDTO.TestCases.Select(tc => new TestCase { Input = tc.Input, Output = tc.Output }).ToList();
+      problem.ExamapleTestCases = addProblemDTO.ExampletestCases.Select(tc => new ExmapleTestCase { Input = tc.Input, Output = tc.Output, Explanation = tc.Explanation }).ToList(); ;
+
+      var addedProblem = await _appDBContext.Problems.AddAsync(problem);
+      await _appDBContext.SaveChangesAsync();
+
+      await AddTopics(problem.Id, addProblemDTO.Topics);
+      await _appDBContext.SaveChangesAsync();
+
+      await transaction.CommitAsync();
+
+      return true;
+    }
+    catch (Exception ex)
+    {
+      transaction.Rollback();
+      Console.WriteLine(ex.Message);
+      return false;
+    }
 
     // var addedProblem = await AddProblem(addProblemDTO);
     // if (addedProblem == null) return null;
@@ -33,6 +52,21 @@ public class ProblemService
     //             AddExampleTestCases(addProblemDTO.GetExmapleTestCases(addedProblem.Id)));
     // await _appDBContext.SaveChangesAsync();
     // return addedProblem;
+  }
+
+  public async Task<bool> AreTopicIdValid(List<int> ids)
+  {
+    var res = await _appDBContext.Topics
+                    .Where(t => ids.Contains(t.Id))
+                    .Select(t => t.Id)
+                    .ToListAsync();
+    return res.Count == ids.Count;
+  }
+
+  private async Task AddTopics(int problemId, List<int> topicIds)
+  {
+    var topics = topicIds.Select(t => new ProblemTopic { TopicId = t, ProblemId = problemId });
+    await _appDBContext.ProblemTopics.AddRangeAsync(topics);
   }
   private async Task<Problem?> AddProblem(AddProblemDTO addProblemDTO)
   {

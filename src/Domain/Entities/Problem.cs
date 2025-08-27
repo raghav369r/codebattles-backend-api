@@ -24,5 +24,5 @@ public class Problem
 
   public List<TestCase> TestCases { get; set; } = new List<TestCase>();
   public List<ExmapleTestCase> ExamapleTestCases { get; set; } = new List<ExmapleTestCase>();
-
+  public List<Topic> Topics { get; set; } = new List<Topic>();
 }
