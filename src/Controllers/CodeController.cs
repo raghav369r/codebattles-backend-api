@@ -9,16 +9,26 @@ namespace CodeBattles_Backend.Controllers;
 // [Authorize]
 public class CodeController : ControllerBase
 {
-  private readonly GlotAPIService _glotAPIService;
-  public CodeController(GlotAPIService glotAPIService)
+  private readonly CodeRunService _codeRunService;
+  private readonly ProblemService _problemService;
+  public CodeController(CodeRunService codeRunService, ProblemService problemService)
   {
-    _glotAPIService = glotAPIService;
+    _codeRunService = codeRunService;
+    _problemService = problemService;
   }
 
   [HttpPost("run")]
   public async Task<ActionResult<RunCodeResponse>> RunCode([FromBody] RunCodeRequest runCodeRequest)
   {
-    var res = await _glotAPIService.RunCode(code: runCodeRequest.Code, language: runCodeRequest.Language, input: runCodeRequest.Input);
-    return Ok(res);
+    RunCodeResponse? response;
+    int problemId = 22;// runCodeRequest.ProblemID;
+    if (problemId == 0) // plain code
+      response = await _codeRunService.RunPlainCode(runCodeRequest);
+    else // code need to run against exmaple test cases
+    {
+      var testCases = await _problemService.GetExmapleTestCases(problemId);
+      response = await _codeRunService.RunWithETCs(runCodeRequest, testCases);
+    }
+    return Ok(response);
   }
 }

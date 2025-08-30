@@ -16,7 +16,7 @@ public class GlotAPIService
       new System.Net.Http.Headers.AuthenticationHeaderValue("Token", apiKey);
   }
 
-  public async Task<RunCodeResponse?> RunCode(string code, string language, string input)
+  public async Task<RunCodeResponse?> RunCode(string code, string language, string? input)
   {
     string language_extension = language == "python" ? "py" : language;
     string url_with_language = BASE_URL + language + "/latest";

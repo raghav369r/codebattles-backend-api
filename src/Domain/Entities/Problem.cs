@@ -15,8 +15,6 @@ public class Problem
   public string Description { get; set; } = null!;
   [Required, MaxLength(20)]
   public Difficulty Difficulty { get; set; }
-  public string? StartCode { get; set; }
-  public string? SolutionCode { get; set; }
   public int OrganisationId { get; set; } = 0;
   public int CreatedBy { get; set; } = 5;
   public DateTime CreatedAt { get; set; }

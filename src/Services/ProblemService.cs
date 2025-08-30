@@ -63,11 +63,20 @@ public class ProblemService
     return res.Count == ids.Count;
   }
 
+  public async Task<List<ExmapleTestCase>> GetExmapleTestCases(int problemId)
+  {
+    var exTestCases = await _appDBContext.ExampleTestCases.
+                            Where(t => t.ProblemId == problemId)
+                            .ToListAsync();
+    return exTestCases;
+  }
+
   private async Task AddTopics(int problemId, List<int> topicIds)
   {
     var topics = topicIds.Select(t => new ProblemTopic { TopicId = t, ProblemId = problemId });
     await _appDBContext.ProblemTopics.AddRangeAsync(topics);
   }
+
   private async Task<Problem?> AddProblem(AddProblemDTO addProblemDTO)
   {
     return (await _appDBContext.Problems.AddAsync(addProblemDTO.ToProblemEntity())).Entity;
@@ -84,4 +93,5 @@ public class ProblemService
     await _appDBContext.ExampleTestCases.AddRangeAsync(exampleTestCases);
     return true;
   }
+
 }
