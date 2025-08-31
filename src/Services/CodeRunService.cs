@@ -1,4 +1,4 @@
-using CodeBattles_Backend.Domain.Entities;
+using CodeBattles_Backend.Domain.Entities.Problem;
 using CodeBattles_Backend.DTOs;
 
 namespace CodeBattles_Backend.Services;

@@ -1,5 +1,5 @@
 using System.ComponentModel.DataAnnotations;
-using CodeBattles_Backend.Domain.Entities;
+using CodeBattles_Backend.Domain.Entities.Problem;
 
 namespace CodeBattles_Backend.DTOs.AddProblemDTOs;
 

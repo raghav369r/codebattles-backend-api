@@ -1,5 +1,5 @@
 using CodeBattles_Backend.Domain;
-using CodeBattles_Backend.Domain.Entities;
+using CodeBattles_Backend.Domain.Entities.Problem;
 using CodeBattles_Backend.DTOs.AddProblemDTOs;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage;

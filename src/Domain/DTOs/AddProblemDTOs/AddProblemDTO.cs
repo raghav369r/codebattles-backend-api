@@ -1,6 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 using System.Text.Json.Serialization;
-using CodeBattles_Backend.Domain.Entities;
+using CodeBattles_Backend.Domain.Entities.Problem;
 using CodeBattles_Backend.Domain.Enums;
 
 namespace CodeBattles_Backend.DTOs.AddProblemDTOs;

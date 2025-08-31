@@ -2,7 +2,7 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using CodeBattles_Backend.Domain.Enums;
 
-namespace CodeBattles_Backend.Domain.Entities;
+namespace CodeBattles_Backend.Domain.Entities.Problem;
 
 [Table("problems")]
 public class Problem

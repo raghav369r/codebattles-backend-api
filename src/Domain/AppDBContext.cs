@@ -1,4 +1,5 @@
 using CodeBattles_Backend.Domain.Entities;
+using CodeBattles_Backend.Domain.Entities.Problem;
 using Microsoft.EntityFrameworkCore;
 
 namespace CodeBattles_Backend.Domain;

@@ -1,6 +1,6 @@
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace CodeBattles_Backend.Domain.Entities;
+namespace CodeBattles_Backend.Domain.Entities.Problem;
 
 [Table("problemTopics")]
 public class ProblemTopic

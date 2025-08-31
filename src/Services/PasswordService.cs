@@ -19,7 +19,7 @@ public class PasswordService
 
     public bool ComparePassword(UserJwtDTO? user, string hashedPassword, string plainPassword)
     {
-        var result = _passwordHasher.VerifyHashedPassword(user, hashedPassword, plainPassword);
+        var result = _passwordHasher.VerifyHashedPassword(user!, hashedPassword, plainPassword);
         return result == PasswordVerificationResult.Success;
     }
 }

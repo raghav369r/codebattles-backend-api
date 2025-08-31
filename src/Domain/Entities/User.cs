@@ -10,19 +10,19 @@ public class User
   public int Id { get; set; }
 
   [Required, EmailAddress, MaxLength(100)]
-  public string Email { get; set; }
+  public string Email { get; set; } = null!;
 
   [Required, MinLength(3), MaxLength(100)]
-  public string FirstName { get; set; }
+  public string FirstName { get; set; } = null!;
 
   [Required, MinLength(3), MaxLength(100)]
-  public string LastName { get; set; }
+  public string LastName { get; set; } = null!;
 
   [MinLength(5), MaxLength(100)]
   public string? UserName { get; set; }
 
   [Required, MinLength(5), MaxLength(255)]
-  public string Password { get; set; }
+  public string Password { get; set; } = null!;
 
   public bool IsCreater { get; set; } = false;
 

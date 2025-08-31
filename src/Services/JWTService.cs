@@ -1,7 +1,6 @@
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
-using CodeBattles_Backend.Domain.DTOs;
 using CodeBattles_Backend.Domain.Entities;
 using Microsoft.IdentityModel.Tokens;
 
