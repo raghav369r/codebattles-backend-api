@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace CodeBattles_Backend.Controllers;
 
 [ApiController]
-[Route("api/[controller]")]
+[Route("api/[controller]/add")]
 // [Authorize]
 public class ProblemController : ControllerBase
 {
@@ -15,8 +15,7 @@ public class ProblemController : ControllerBase
     _problemService = problemService;
   }
 
-
-  [HttpPost("add")]
+  [HttpPost]
   public async Task<ActionResult> AddProblem([FromBody] AddProblemDTO addProblemDTO)
   {
     bool isAvailable = await _problemService.IsTitleAvailable(addProblemDTO.Title);
@@ -28,6 +27,17 @@ public class ProblemController : ControllerBase
     if (await _problemService.AddProblemAndTCS(addProblemDTO))
       return Ok("Problem Added successfully");
     return StatusCode(500, new { message = "some thing went wrong!!" });
+  }
+
+  [HttpPost("codes")]
+  public async Task<ActionResult> AddProblemCodes([FromBody] ProblemCodeDTO problemCodeDTO)
+  {
+    if (!await _problemService.IsProblemIdValid(problemCodeDTO.ProblemId))
+      return BadRequest(new { message = "Invalid Problem Id!!" });
+    if (!await _problemService.IsLanguageIdValid(problemCodeDTO.LanguageId))
+      return BadRequest(new { message = "Invalid Language Id!!" });
+    var res = await _problemService.AddProblemCodes(problemCodeDTO);
+    return Ok(true);
   }
 
 }

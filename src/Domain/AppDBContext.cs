@@ -13,6 +13,8 @@ public class AppDBContext : DbContext
   public DbSet<ProblemTopic> ProblemTopics { get; set; }
   public DbSet<ExmapleTestCase> ExampleTestCases { get; set; }
   public DbSet<TestCase> TestCases { get; set; }
+  public DbSet<Language> Languages { get; set; }
+  public DbSet<ProblemCode> ProblemCodes { get; set; }
 
   protected override void OnModelCreating(ModelBuilder modelBuilder)
   {
@@ -29,7 +31,7 @@ public class AppDBContext : DbContext
             .HasMaxLength(20);
     problem.Property(p => p.CreatedAt)
             .HasDefaultValueSql("GETDATE()");
-            
+
     modelBuilder.Entity<ProblemTopic>()
          .HasKey(e => new { e.ProblemId, e.TopicId });
 

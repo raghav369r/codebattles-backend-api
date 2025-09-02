@@ -1,5 +1,6 @@
 using System.Text;
 using System.Text.Json;
+using CodeBattles_Backend.Domain.Entities;
 using CodeBattles_Backend.DTOs;
 
 namespace CodeBattles_Backend.Services;
@@ -16,16 +17,15 @@ public class GlotAPIService
       new System.Net.Http.Headers.AuthenticationHeaderValue("Token", apiKey);
   }
 
-  public async Task<RunCodeResponse?> RunCode(string code, string language, string? input)
+  public async Task<RunCodeResponse?> RunCode(string code, string language, string extention, string? input)
   {
-    string language_extension = language == "python" ? "py" : language;
     string url_with_language = BASE_URL + language + "/latest";
     var json = JsonSerializer.Serialize(
       new
       {
         stdin = input ?? "",
         files = new[] { new{
-              name = "main."+language_extension,
+              name = "main."+ extention,
               content = code }}
       });
     var content = new StringContent(json, Encoding.UTF8, "application/json");

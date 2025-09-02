@@ -1,4 +1,5 @@
 using CodeBattles_Backend.Domain;
+using CodeBattles_Backend.Domain.Entities;
 using CodeBattles_Backend.Domain.Entities.Problem;
 using CodeBattles_Backend.DTOs.AddProblemDTOs;
 using Microsoft.EntityFrameworkCore;
@@ -17,6 +18,30 @@ public class ProblemService
   public async Task<bool> IsTitleAvailable(string title)
   {
     return !await _appDBContext.Problems.AnyAsync(p => p.Title == title);
+  }
+
+  public async Task<bool> IsProblemIdValid(int Id)
+  {
+    return await _appDBContext.Problems.AnyAsync(p => p.Id == Id);
+  }
+
+  public async Task<bool> IsLanguageIdValid(int Id)
+  {
+    return await _appDBContext.Languages.AnyAsync(l => l.Id == Id);
+  }
+
+  public async Task<ProblemCode?> GetProblemCodes(int problemId, int languageId)
+  {
+    return await _appDBContext.ProblemCodes
+                              .SingleOrDefaultAsync(
+                                  t => t.ProblemId == problemId
+                                      && t.LanguageId == languageId
+                              );
+  }
+
+  public async Task<Language?> GetLanguage(int languageId)
+  {
+    return await _appDBContext.Languages.FindAsync(languageId);
   }
 
   public async Task<bool> AddProblemAndTCS(AddProblemDTO addProblemDTO)
@@ -69,6 +94,13 @@ public class ProblemService
                             Where(t => t.ProblemId == problemId)
                             .ToListAsync();
     return exTestCases;
+  }
+
+  public async Task<bool> AddProblemCodes(ProblemCodeDTO problemCodesDto)
+  {
+    await _appDBContext.ProblemCodes.AddAsync(problemCodesDto.ToProblemCodeEntity());
+    await _appDBContext.SaveChangesAsync();
+    return true;
   }
 
   private async Task AddTopics(int problemId, List<int> topicIds)
