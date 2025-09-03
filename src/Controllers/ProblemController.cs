@@ -36,6 +36,8 @@ public class ProblemController : ControllerBase
       return BadRequest(new { message = "Invalid Problem Id!!" });
     if (!await _problemService.IsLanguageIdValid(problemCodeDTO.LanguageId))
       return BadRequest(new { message = "Invalid Language Id!!" });
+    if (await _problemService.IsProblemCodeExist(problemCodeDTO.ProblemId, problemCodeDTO.LanguageId))
+      return BadRequest(new { message = "Problem Codes for this language already exist for given problem" });
     var res = await _problemService.AddProblemCodes(problemCodeDTO);
     return Ok(true);
   }

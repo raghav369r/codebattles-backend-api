@@ -30,13 +30,13 @@ public class CodeRunService
     if (Language == null || ProblemCode == null) return null;
     string inputString = MakeInputStringFromTCs(exmapleTestCases);
     // build code from problem
-    string code = runCodeRequest.Code + ProblemCode.ValidationCode;
+    string code = ProblemCode.ValidationCode + runCodeRequest.Code;
     return await _glotAPIService
                     .RunCode(
-                        code: runCodeRequest.Code,
+                        code: code,
                         language: Language.Name,
                         extention: Language.Extension,
-                        input: runCodeRequest.Input
+                        input: inputString
                     );
   }
 
@@ -49,7 +49,6 @@ public class CodeRunService
     int tcCount = exmapleTestCases.Count;
     inputString += tcCount + "\n";
     exmapleTestCases.ForEach(etc => inputString += etc.Id + " " + etc.Input + " " + etc.Output + "\n");
-    // Console.WriteLine("\n\n" + inputString);
     return inputString;
   }
 
@@ -59,7 +58,6 @@ public class CodeRunService
     int tcCount = exmapleTestCases.Count;
     inputString += tcCount + "\n";
     exmapleTestCases.ForEach(etc => inputString += etc.Id + " " + etc.Input + " " + etc.Output + "\n");
-    // Console.WriteLine("\n\n" + inputString);
     return inputString;
   }
 }

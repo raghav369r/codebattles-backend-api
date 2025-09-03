@@ -33,7 +33,7 @@ public class AddProblemDTO
     {
       Title = this.Title,
       Description = this.Description,
-      Difficulty = this.Difficulty ?? 0
+      Difficulty = this.Difficulty ?? 0,
     };
   }
   public List<TestCase> GetTestCases(int problemId)

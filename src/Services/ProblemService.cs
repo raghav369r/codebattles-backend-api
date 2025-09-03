@@ -30,6 +30,11 @@ public class ProblemService
     return await _appDBContext.Languages.AnyAsync(l => l.Id == Id);
   }
 
+  public async Task<bool> IsProblemCodeExist(int problmId, int languageId)
+  {
+    return await _appDBContext.ProblemCodes.AnyAsync(pc => pc.ProblemId == problmId && pc.LanguageId == languageId);
+  }
+
   public async Task<ProblemCode?> GetProblemCodes(int problemId, int languageId)
   {
     return await _appDBContext.ProblemCodes
