@@ -5,7 +5,7 @@ using CodeBattles_Backend.DTOs.AddProblemDTOs;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage;
 
-namespace CodeBattles_Backend.Services;
+namespace CodeBattles_Backend.Services.AdminService;
 
 public class ProblemService
 {
@@ -17,31 +17,67 @@ public class ProblemService
 
   public async Task<bool> IsTitleAvailable(string title)
   {
-    return !await _appDBContext.Problems.AnyAsync(p => p.Title == title);
+    return !await _appDBContext.Problems
+                  .AsNoTracking()
+                  .AnyAsync(p => p.Title == title);
   }
 
   public async Task<bool> IsProblemIdValid(int Id)
   {
-    return await _appDBContext.Problems.AnyAsync(p => p.Id == Id);
+    return await _appDBContext.Problems
+                  .AsNoTracking()
+                  .AnyAsync(p => p.Id == Id);
   }
 
   public async Task<bool> IsLanguageIdValid(int Id)
   {
-    return await _appDBContext.Languages.AnyAsync(l => l.Id == Id);
+    return await _appDBContext.Languages
+                  .AsNoTracking()
+                  .AnyAsync(l => l.Id == Id);
   }
 
   public async Task<bool> IsProblemCodeExist(int problmId, int languageId)
   {
-    return await _appDBContext.ProblemCodes.AnyAsync(pc => pc.ProblemId == problmId && pc.LanguageId == languageId);
+    return await _appDBContext.ProblemCodes
+                  .AsNoTracking()
+                  .AnyAsync(pc => pc.ProblemId == problmId && pc.LanguageId == languageId);
+  }
+
+  public async Task<ProblemCode?> GetProblemCodes(int id)
+  {
+    return await _appDBContext.ProblemCodes.FindAsync(id);
   }
 
   public async Task<ProblemCode?> GetProblemCodes(int problemId, int languageId)
   {
     return await _appDBContext.ProblemCodes
-                              .SingleOrDefaultAsync(
-                                  t => t.ProblemId == problemId
-                                      && t.LanguageId == languageId
-                              );
+                  .AsNoTracking()
+                  .SingleOrDefaultAsync(t =>
+                        t.ProblemId == problemId
+                          && t.LanguageId == languageId
+                  );
+  }
+
+  public async Task<bool> UpdateProblemCode(int id, UpdateCodesDTO updateCodesDTO)
+  {
+    // Is problemCode id Valid
+    var existingCode = await GetProblemCodes(id);
+    if (existingCode == null) return false;
+    // does current user has access to modify this
+    if (updateCodesDTO.SolutionCode != null) existingCode.SolutionCode = updateCodesDTO.SolutionCode;
+    if (updateCodesDTO.ValidationCode != null) existingCode.ValidationCode = updateCodesDTO.ValidationCode;
+    if (updateCodesDTO.StartCode != null) existingCode.StartCode = updateCodesDTO.StartCode;
+    await _appDBContext.SaveChangesAsync();
+    return true;
+  }
+
+  public async Task<bool> DeleteProblemCode(int id)
+  {
+    var problemCode = await _appDBContext.ProblemCodes.FindAsync(id);
+    if (problemCode == null) return false;
+    _appDBContext.ProblemCodes.Remove(problemCode);
+    await _appDBContext.SaveChangesAsync();
+    return true;
   }
 
   public async Task<Language?> GetLanguage(int languageId)
@@ -87,6 +123,7 @@ public class ProblemService
   public async Task<bool> AreTopicIdValid(List<int> ids)
   {
     var res = await _appDBContext.Topics
+                    .AsNoTracking()
                     .Where(t => ids.Contains(t.Id))
                     .Select(t => t.Id)
                     .ToListAsync();
@@ -95,8 +132,9 @@ public class ProblemService
 
   public async Task<List<ExmapleTestCase>> GetExmapleTestCases(int problemId)
   {
-    var exTestCases = await _appDBContext.ExampleTestCases.
-                            Where(t => t.ProblemId == problemId)
+    var exTestCases = await _appDBContext.ExampleTestCases
+                            .AsNoTracking()
+                            .Where(t => t.ProblemId == problemId)
                             .ToListAsync();
     return exTestCases;
   }

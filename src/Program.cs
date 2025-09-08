@@ -58,7 +58,8 @@ public class Program
         builder.Services.AddScoped<PasswordService>();
         builder.Services.AddScoped<AuthService>();
         builder.Services.AddScoped<GlotAPIService>();
-        builder.Services.AddScoped<ProblemService>();
+        builder.Services.AddScoped<Services.AdminService.ProblemService>();
+        builder.Services.AddScoped<Services.UserService.ProblemService>();
         builder.Services.AddScoped<CodeRunService>();
         builder.Services.AddTransient<GlobalExceptionHandler>();
 

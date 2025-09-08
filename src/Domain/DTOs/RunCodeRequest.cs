@@ -10,4 +10,5 @@ public record RunCodeRequest
   public int LanguageId { set; get; }
   public string? Input { set; get; }
   public int ProblemId { get; set; } = 0;
+  public int ContestId { get; set; } = 0;
 }

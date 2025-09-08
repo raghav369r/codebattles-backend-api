@@ -2,6 +2,7 @@ using CodeBattles_Backend.Domain.Entities;
 using CodeBattles_Backend.Domain.Entities.Problem;
 using CodeBattles_Backend.DTOs;
 using CodeBattles_Backend.Services;
+using CodeBattles_Backend.Services.AdminService;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CodeBattles_Backend.Controllers;
@@ -43,5 +44,12 @@ public class CodeController : ControllerBase
       }
     }
     return Ok(response);
+  }
+
+  [HttpPost("submit")]
+  public async Task<ActionResult> SubmitCode([FromBody] RunCodeRequest runCodeRequest)
+  {
+    
+    throw new NotImplementedException();
   }
 }
